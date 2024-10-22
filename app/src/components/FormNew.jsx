@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
+
+
 import {
   Typography,
   Grid,
@@ -14,6 +16,7 @@ import {
   InputLabel,
 } from "@mui/material";
 import styles from "./Form.module.css";
+
 
 const FormNew = () => {
   const navigate = useNavigate();
@@ -52,6 +55,9 @@ const FormNew = () => {
     }
   }, [location.state]);
 
+  // State to hold the entries
+  const [entries, setEntries] = useState([]); // Ensure this is defined
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
@@ -63,6 +69,7 @@ const FormNew = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      await handleAdd();
       // TODO: change url to use an env variable to make it easier to change when deploying in different environments
       const response = await axios.post(
         "http://ec2-34-219-155-200.us-west-2.compute.amazonaws.com:8000/clients/predictions",
@@ -77,6 +84,26 @@ const FormNew = () => {
       navigate("/results", { state: { formData, probability, interventions } });
     } catch (error) {
       console.error("Error submitting form:", error);
+    }
+  };
+
+
+  const handleAdd = async () => {
+    try {
+      // Send formData to the backend at the new endpoint
+      const response = await axios.post(
+        "http://localhost:3001/api/submit-form", // Update the URL as needed
+        formData
+      );
+
+      // Assuming the response contains the newly added submission or confirmation
+      console.log(response.data);
+
+      // Update the entries state with the new submission
+      setEntries((prevEntries) => [...prevEntries, response.data.submission]);
+      handleClearForm(); // Optionally clear the form after adding
+    } catch (error) {
+      console.error("Error adding entry:", error);
     }
   };
 

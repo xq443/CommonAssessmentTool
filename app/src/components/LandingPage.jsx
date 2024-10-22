@@ -14,6 +14,9 @@ function LandingPage() {
     // Placeholder for file upload functionality
     console.log("File upload functionality to be implemented");
   };
+  const handleUserList = () => {
+    navigate("/list");
+  };
 
   return (
     <Box
@@ -78,6 +81,19 @@ function LandingPage() {
             }}
           >
             New Entry
+          </Button>
+          <Button
+            variant="contained"
+            size="large"
+            onClick={handleUserList}
+            sx={{
+              backgroundColor: "#4CAF50",
+              "&:hover": {
+                backgroundColor: "#367c39",
+              },
+            }}
+          >
+            User List
           </Button>
           <Button
             variant="outlined"
