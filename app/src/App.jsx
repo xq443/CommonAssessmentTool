@@ -6,7 +6,6 @@ import ResultPage from "./components/ResultPage";
 import Footer from "./components/Footer";
 import LandingPage from "./components/LandingPage";
 import ClientSearch from "./components/ClientSearch";
-import DetailPage from "./components/DetailPage";
 import ListPage from "./components/ListPage";
 import "./App.css";
 
@@ -23,7 +22,6 @@ function App() {
             <Route path="/form" element={<FormNew />} />
             <Route path="/results" element={<ResultPage />} />
             <Route path="/clients" element={<ClientSearch />} />
-            <Route path="/client/:clientId" element={<DetailPage />} />
             <Route path="/list" element={<ListPage />} />
           </Routes>
         </main>

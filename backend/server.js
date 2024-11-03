@@ -14,45 +14,37 @@ app.use(express.json()); // parse JSON entity
 // read db.json
 const dbPath = path.join(__dirname, "db.json");
 
-// API: search clients by first name
+// API endpoint to search clients by first name
 app.get('/api/clients/search', (req, res) => {
   console.log('Received request for search with query:', req.query);
-  const { firstName } = req.query;
+  const name = "John"; // Hardcoded name for testing
+  console.log(`Searching for clients with name: ${name}`);
 
-  console.log('first name:', firstName);
-
-  if (!firstName) {
-    return res.status(400).json({ error: "Name query parameter is required" });
-  }
-
+  // Read the clients data from db.json
   fs.readFile(dbPath, "utf8", (err, data) => {
     if (err) {
-      console.error("Error reading database:", err);
       return res.status(500).json({ message: "Error reading database" });
     }
 
-    let db;
-    try {
-      db = JSON.parse(data);
-    } catch (parseError) {
-      console.error("Error parsing database JSON:", parseError);
-      return res.status(500).json({ message: "Error parsing database" });
-    }
+    const db = JSON.parse(data);
+    const clients = db["form-submissions"] || []; // Ensure the clients array exists
+    console.log('All clients:', clients); // Log all clients before filtering
 
-    const clients = db["form-submissions"] || [];
+
     // Filter clients by first name (case insensitive)
     const matchingClients = clients.filter(client => {
-      const clientFirstName = client.firstName; // Get the client's first name
-      return clientFirstName && clientFirstName.toLowerCase() === firstName.toLowerCase(); // Match with the provided first name
+      const firstName = client.firstName; // Get the first name
+      return firstName && firstName.trim().toLowerCase() === name.trim().toLowerCase(); // Match case insensitively
     });
 
-    console.log('Matching clients:', matchingClients);
+    console.log("Filtered clients:", matchingClients); // Log the filtered results
     res.json(matchingClients);
   });
 });
 
 
-// helper function to generate uuid
+
+
 function generateUniqueId(length = 4) {
   const characters = "abcdefghijklmnopqrstuvwxyz0123456789";
   let result = "";
@@ -62,7 +54,6 @@ function generateUniqueId(length = 4) {
   }
   return result;
 }
-
 
 // API: create new user info form
 app.post("/api/submit-form", (req, res) => {
@@ -101,26 +92,16 @@ app.post("/api/submit-form", (req, res) => {
   });
 });
 
-
-// API: read the specific user info
-app.get("/api/users/:id", (req, res) => {
-  const userId = req.params.id; // Extract user ID from request parameters
+// API: read user info
+app.get("/api/users", (req, res) => {
   fs.readFile(dbPath, "utf8", (err, data) => {
     if (err) {
-      return res.status(500).json({ message: "Error reading database" }); // Handle file read error
+      return res.status(500).json({ message: "Error reading database" });
     }
-    
-    const db = JSON.parse(data); // Parse the JSON data
-    const user = db["form-submissions"].find(user => user.id === userId); // Find user by ID
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" }); // Handle case where user is not found
-    }
-
-    res.json(user); // Return the found user object
+    const db = JSON.parse(data);
+    res.json(db["form-submissions"]);
   });
 });
-
 
 // API: update user info
 app.put("/api/update-user/:id", (req, res) => {
