@@ -1,8 +1,22 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 
 const Navbar = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+    if (searchQuery) {
+      navigate(`/clients?query=${encodeURIComponent(searchQuery)}`);
+    }
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-container">
@@ -17,8 +31,14 @@ const Navbar = () => {
             <Link to="/predictions">Predictions</Link>
           </li>
         </ul> */}
-        <form className="nav-search">
-          <input type="text" placeholder="Search..." aria-label="Search" />
+        <form className="nav-search" onSubmit={handleSearchSubmit}>
+          <input
+            type="text"
+            placeholder="Search..."
+            aria-label="Search"
+            value={searchQuery}
+            onChange={handleSearchChange}
+          />
           <button type="submit">Go</button>
         </form>
       </div>

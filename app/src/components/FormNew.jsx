@@ -22,6 +22,8 @@ const FormNew = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
     age: 0,
     gender: "",
     work_experience: 0,
@@ -109,6 +111,8 @@ const FormNew = () => {
 
   const handleClearForm = () => {
     setFormData({
+      firstName: "",
+      lastName: "",
       age: 0,
       gender: "",
       work_experience: 0,
@@ -148,6 +152,28 @@ const FormNew = () => {
           Candidate Form
         </Typography>
         <Grid container spacing={3}>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="First Name"
+              type="text"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleChange}
+              variant="outlined"
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Last Name"
+              type="text"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleChange}
+              variant="outlined"
+              fullWidth
+            />
+          </Grid>
           <Grid item xs={12} sm={3}>
             <TextField
               label="Age"

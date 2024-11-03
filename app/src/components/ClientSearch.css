@@ -1,0 +1,47 @@
+.centered-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f4f4f9;
+    color: #333;
+    font-family: 'Arial', sans-serif;
+    padding-top: 20px; 
+  }
+  
+  .form-container {
+    background: white;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: 80%;
+    max-width: 500px;
+    margin-top: 10px; 
+  }
+  
+  .result-container {
+    margin-top: 10px;
+    padding: 20px;
+    background: #e2e2e2;
+    border-radius: 8px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .client-item {
+    padding: 12px;
+    margin-bottom: 8px;
+    background-color: #3498db;
+    color: #ecf0f1;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+  }
+  
+  .client-item:hover {
+    background-color: #2980b9;
+  }
+  
+  .error-message {
+    color: red;
+  }
+  

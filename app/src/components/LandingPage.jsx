@@ -14,6 +14,7 @@ function LandingPage() {
     // Placeholder for file upload functionality
     console.log("File upload functionality to be implemented");
   };
+  
   const handleUserList = () => {
     navigate("/list");
   };
