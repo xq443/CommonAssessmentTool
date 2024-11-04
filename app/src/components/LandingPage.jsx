@@ -84,19 +84,6 @@ function LandingPage() {
             New Entry
           </Button>
           <Button
-            variant="contained"
-            size="large"
-            onClick={handleUserList}
-            sx={{
-              backgroundColor: "#4CAF50",
-              "&:hover": {
-                backgroundColor: "#367c39",
-              },
-            }}
-          >
-            User List
-          </Button>
-          <Button
             variant="outlined"
             size="large"
             onClick={handleFileUpload}

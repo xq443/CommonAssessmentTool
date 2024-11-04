@@ -4,21 +4,28 @@ const path = require("path");
 const app = express();
 const port = process.env.PORT || 3001;
 const morgan = require('morgan');
-
 const cors = require("cors");
-app.use(cors());
-app.use(morgan('dev'));
 
+app.use(cors({
+  origin: "http://localhost:3000",
+}
+));
+app.use(morgan('dev'));
 app.use(express.json()); // parse JSON entity
 
 // read db.json
 const dbPath = path.join(__dirname, "db.json");
 
-// API endpoint to search clients by first name
+
+// API: search clients by first name
 app.get('/api/clients/search', (req, res) => {
   console.log('Received request for search with query:', req.query);
-  const name = "John"; // Hardcoded name for testing
-  console.log(`Searching for clients with name: ${name}`);
+
+  const { firstName } = req.query;
+  console.log('first name:', firstName);
+  if (!firstName) {
+    return res.status(400).json({ error: "Name query parameter is required" });
+  }
 
   // Read the clients data from db.json
   fs.readFile(dbPath, "utf8", (err, data) => {
@@ -26,23 +33,48 @@ app.get('/api/clients/search', (req, res) => {
       return res.status(500).json({ message: "Error reading database" });
     }
 
-    const db = JSON.parse(data);
+    let db;
+    try {
+      db = JSON.parse(data);
+    } catch (parseError) {
+      console.error("Error parsing database JSON:", parseError);
+      return res.status(500).json({ message: "Error parsing database" });
+    }
+
     const clients = db["form-submissions"] || []; // Ensure the clients array exists
-    console.log('All clients:', clients); // Log all clients before filtering
+    //console.log('All clients:', clients); // Log all clients before filtering
 
 
     // Filter clients by first name (case insensitive)
     const matchingClients = clients.filter(client => {
-      const firstName = client.firstName; // Get the first name
-      return firstName && firstName.trim().toLowerCase() === name.trim().toLowerCase(); // Match case insensitively
+      const clientFirstName = client.firstName; // Get the client's first name
+      return clientFirstName.toLowerCase() === firstName.toLowerCase();
     });
 
-    console.log("Filtered clients:", matchingClients); // Log the filtered results
+    console.log('Matching clients:', matchingClients);
     res.json(matchingClients);
   });
 });
 
+// API: get user details by ID
+app.get("/api/client/:id", (req, res) => {
+  const userId = req.params.id;
 
+  fs.readFile(dbPath, "utf8", (err, data) => {
+    if (err) {
+      return res.status(500).json({ message: "Error reading database" });
+    }
+
+    const db = JSON.parse(data);
+    const user = db["form-submissions"].find((user) => user.id === userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(user);
+  });
+});
 
 
 function generateUniqueId(length = 4) {
@@ -166,6 +198,8 @@ app.delete("/api/delete-user/:id", (req, res) => {
     });
   });
 });
+
+
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);

@@ -7,6 +7,8 @@ import Footer from "./components/Footer";
 import LandingPage from "./components/LandingPage";
 import ClientSearch from "./components/ClientSearch";
 import ListPage from "./components/ListPage";
+import DetailPage from "./components/DetailPage";
+
 import "./App.css";
 
 
@@ -22,7 +24,8 @@ function App() {
             <Route path="/form" element={<FormNew />} />
             <Route path="/results" element={<ResultPage />} />
             <Route path="/clients" element={<ClientSearch />} />
-            <Route path="/list" element={<ListPage />} />
+            <Route path="/client/:id" element={<DetailPage />} />
+
           </Routes>
         </main>
         <Footer />

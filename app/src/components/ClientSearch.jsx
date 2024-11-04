@@ -59,7 +59,7 @@ const handleSearch = async (query) => { // Use 'query' as the parameter name
                   onClick={() => handleClientClick(client.id)} 
                   style={{ cursor: "pointer" }} 
                 >
-                  <strong>{client.firstName}</strong> (Age: {client.age}, Gender: {client.gender})
+                  <strong>{client.firstName}</strong> (Last Name: {client.lastName}, Age: {client.age}, Gender: {client.gender})
                 </li>
               ))}
             </ul>
